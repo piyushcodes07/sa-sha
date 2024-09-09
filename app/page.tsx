@@ -3,8 +3,10 @@ import { PermissionsTable } from "@/components/permissions-table";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { useState } from "react";
+import Loader from "@/components/ui/loader";
 export default function Home() {
-
+  const [loading,setLoading] = useState(false)
+  const [report,setReport] = useState(false)
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -21,6 +23,7 @@ export default function Home() {
     formData.append("file", file);
 
     try {
+      setLoading(true)
       const response = await fetch(`http://127.0.0.1:8000/api/v1/upload`, {
         method: "POST",
         body: formData,
@@ -34,9 +37,9 @@ export default function Home() {
 
 
       if (response.ok) {
-        alert("File uploaded successfully");
+        console.log("UPLOADED SUCCESSFULLY")
       } else {
-        alert("File upload failed");
+        console.log("FAILED FILE UPLOAD");
       }
       
       const hash = {
@@ -55,8 +58,8 @@ export default function Home() {
 
       const report = await get_report.json()
       console.log(report);
-      
-
+      setReport(true)
+      setLoading(false)
     } catch (error) {
       console.error("Error uploading file:", error);
     }
@@ -75,8 +78,13 @@ export default function Home() {
           Upload APK
         </Button>
       </form>
-
-      <PermissionsTable />
+      {
+        loading?
+        <Loader/>:
+        report?
+      <PermissionsTable />:
+      null
+      }
     </div>
   );
 }

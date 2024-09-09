@@ -1,5 +1,5 @@
 import {  CSSProperties } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
+import { HashLoader } from "react-spinners";
 
 const override: CSSProperties = {
   display: "block",
@@ -10,15 +10,21 @@ const override: CSSProperties = {
 function Loader() {
 
   return (
-    <div className="sweet-loading">
-      <ClipLoader
-        color={`#ffffff`}
+    <div>
+    <div className="flex items-center justify-center sweet-loading">
+      <HashLoader
+        color={`#111827`}
         loading={true}
         cssOverride={override}
-        size={150}
+        size={60}
         aria-label="Loading Spinner"
         data-testid="loader"
       />
+      
+    </div>
+    <div>
+    <h1 className="text-lg text-center">Static analysis Started, be patient😴</h1>
+    </div>
     </div>
   );
 }
