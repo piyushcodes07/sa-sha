@@ -1,13 +1,16 @@
-'use client'
+"use client";
 import { PermissionsTable } from "@/components/permissions-table";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { useState } from "react";
 import Loader from "@/components/ui/loader";
+import { Manifest_analysis } from "@/components/manifest_anaysis";
+import AndroidManifest from "@/components/androidManifest";
 export default function Home() {
-  const [loading,setLoading] = useState(false)
-  const [report,setReport] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [report, setReport] = useState(null);
   const [file, setFile] = useState(null);
+  const [hash,setHash] = useState("");
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
@@ -23,43 +26,45 @@ export default function Home() {
     formData.append("file", file);
 
     try {
-      setLoading(true)
+      setLoading(true);
+      console.log(process.env.MOBSF_API_KEY, "key");
+
       const response = await fetch(`http://127.0.0.1:8000/api/v1/upload`, {
         method: "POST",
         body: formData,
         headers: {
-          Authorization: `155cb39d86fe505bc7cc6f1840a232453b6b83fa1835848cc1f78721ac4145c8`,
+          Authorization: `${process.env.NEXT_PUBLIC_MOBSF_API_KEY}`,
         },
       });
 
       const data = await response.json();
       console.log(data);
 
-
       if (response.ok) {
-        console.log("UPLOADED SUCCESSFULLY")
+        console.log("UPLOADED SUCCESSFULLY");
       } else {
         console.log("FAILED FILE UPLOAD");
       }
-      
+
       const hash = {
-        hash:data.hash
-      }
+        hash: data.hash,
+      };
+      setHash(data.hash as string)
       const formBody = new URLSearchParams(hash).toString();
 
-      const get_report = await fetch('http://127.0.0.1:8000/api/v1/scan',{
-        method:'POST',
+      const get_report = await fetch("http://127.0.0.1:8000/api/v1/scan", {
+        method: "POST",
         headers: {
-          Authorization: `155cb39d86fe505bc7cc6f1840a232453b6b83fa1835848cc1f78721ac4145c8`,
+          Authorization: `${process.env.NEXT_PUBLIC_MOBSF_API_KEY}`,
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body:formBody
+        body: formBody,
       });
 
-      const report = await get_report.json()
-      console.log(report);
-      setReport(true)
-      setLoading(false)
+      const final_report = await get_report.json();
+      console.log(final_report);
+      setReport(final_report);
+      setLoading(false);
     } catch (error) {
       console.error("Error uploading file:", error);
     }
@@ -78,13 +83,27 @@ export default function Home() {
           Upload APK
         </Button>
       </form>
-      {
-        loading?
-        <Loader/>:
-        report?
-      <PermissionsTable />:
-      null
-      }
+      {loading ? (
+        <Loader />
+      ) : report ? (
+        <div className="p-2 m-4 ">
+          <AndroidManifest hash={hash}/>
+          
+          <div className="mt-4 shadow-2xl p-3 rounded-md">
+          <label htmlFor="PermissionsTable" className="bold m-4 font-medium">
+            {" "}
+            APPLICATION PERMISSIONS
+          </label>
+          <PermissionsTable permissions={report.permissions} />
+          </div>
+          <div className="mt-4 shadow-2xl p-3 rounded-md">
+            <label htmlFor="manifest analysis" className="bold m-4 font-medium">
+              MOBSF MANIFEST ANALYSIS{" "}
+            </label>
+            <Manifest_analysis manifest_analysis={report.manifest_analysis}/>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

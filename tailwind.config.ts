@@ -12,7 +12,6 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
-    },
       colors: {
             "border": "hsl(var(--border))",
             "input": "hsl(var(--input))",
@@ -73,5 +72,6 @@ const config: Config = {
           }
 },
   plugins: [require("tailwindcss-animate")],
+}
 };
 export default config;
