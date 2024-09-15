@@ -98,9 +98,12 @@ export default function Home() {
           </div>
           <div className="mt-4 shadow-2xl p-3 rounded-md">
             <label htmlFor="manifest analysis" className="bold m-4 font-medium">
-              MOBSF MANIFEST ANALYSIS{" "}
+              ANDROID MANIFEST.XML ANALYSIS{" "}
             </label>
             <Manifest_analysis manifest_analysis={report.manifest_analysis}/>
+          </div>
+          <div className="mt-4 shadow-2xl p-3 rounded-md">
+            
           </div>
         </div>
       ) : null}

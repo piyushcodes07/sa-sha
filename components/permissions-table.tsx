@@ -29,15 +29,15 @@ export function PermissionsTable({ permissions }: { permissions: Permissions }) 
         </TableHeader>
         <TableBody>
           {perm.map(([name, details]) => (
-            <TableRow key={name}>
-              <TableCell className="font-mono">{name}</TableCell>
+            <TableRow className="bg-slate-200 border-2 border-gray-100" key={name}>
+              <TableCell className="font-mono  font-medium">{name}</TableCell>
               <TableCell>
                 <Badge variant={details.status === 'normal' ? 'default' : 'destructive'}>
                   {details.status}
                 </Badge>
               </TableCell>
-              <TableCell>{details.info}</TableCell>
-              <TableCell>{details.description}</TableCell>
+              <TableCell className=" text-base font-medium">{details.info}</TableCell>
+              <TableCell className=" text-base">{details.description}</TableCell>
             </TableRow>
           ))}
         </TableBody>
