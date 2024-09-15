@@ -6,6 +6,7 @@ import { useState } from "react";
 import Loader from "@/components/ui/loader";
 import { Manifest_analysis } from "@/components/manifest_anaysis";
 import AndroidManifest from "@/components/androidManifest";
+import { CodeAnalysis } from "@/components/code_analysis";
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState(null);
@@ -103,7 +104,10 @@ export default function Home() {
             <Manifest_analysis manifest_analysis={report.manifest_analysis}/>
           </div>
           <div className="mt-4 shadow-2xl p-3 rounded-md">
-            
+          <label htmlFor="manifest analysis" className="bold m-4 font-medium">
+              MOBSF CODE ANALYSIS{" "}
+            </label>
+            <CodeAnalysis findings={report.code_analysis.findings} summary={report.code_analysis.summary}/>
           </div>
         </div>
       ) : null}
