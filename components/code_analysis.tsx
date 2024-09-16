@@ -10,7 +10,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-
+import Link from 'next/link'
 type Severity = 'high' | 'warning' | 'info' | 'secure'
 
 type Finding = {
@@ -29,9 +29,10 @@ type Finding = {
 type SecurityReportProps = {
   findings: Record<string, Finding>
   summary: Record<Severity | 'suppressed', number>
+  hash:string
 }
 
-export function CodeAnalysis({ findings, summary }: SecurityReportProps) {
+export function CodeAnalysis({ findings, summary,hash }: SecurityReportProps) {
   const [searchTerm, setSearchTerm] = useState('')
 
   const filteredFindings = Object.entries(findings).filter(([key, finding]) =>
@@ -97,9 +98,9 @@ export function CodeAnalysis({ findings, summary }: SecurityReportProps) {
                   </CollapsibleTrigger>
                   <CollapsibleContent className="mt-2">
                     {Object.entries(finding.files).map(([file, lines]) => (
-                      <div key={file} className="text-sm">
+                      <Link href={`/code_analysis?file=${file}&hash=${hash}&lines=${lines}&type=apk`} key={file} className="text-sm">
                         {file} (lines: {lines})
-                      </div>
+                      </Link>
                     ))}
                   </CollapsibleContent>
                 </Collapsible>

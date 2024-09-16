@@ -107,7 +107,7 @@ export default function Home() {
           <label htmlFor="manifest analysis" className="bold m-4 font-medium">
               MOBSF CODE ANALYSIS{" "}
             </label>
-            <CodeAnalysis findings={report.code_analysis.findings} summary={report.code_analysis.summary}/>
+            <CodeAnalysis hash={hash} findings={report.code_analysis.findings} summary={report.code_analysis.summary}/>
           </div>
         </div>
       ) : null}
